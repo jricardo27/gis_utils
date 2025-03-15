@@ -1,0 +1,77 @@
+[project]
+name = "gis-utils"
+version = "0.1.0"
+description = "GIS utilities"
+requires-python = ">=3.13"
+dependencies = [
+    "click>=8.1.8",
+    "fiona>=1.10.1",
+]
+
+[dependency-groups]
+dev = [
+    "isort>=6.0.1",
+    "pre-commit>=4.1.0",
+    "pylint>=3.3.5",
+    "pyright>=1.1.396",
+]
+
+[tool.isort]
+combine_as_imports=true
+include_trailing_comma=true
+line_length=160
+lines_between_sections=0
+multi_line_output=3
+skip=[".git", ".eggs", ".venv"]
+
+[tool.pylint]
+disable=[
+    "missing-module-docstring",         # C0114: Missing module docstring
+    "missing-class-docstring",          # C0115: Missing class docstring
+    "missing-function-docstring",       # C0116: Missing function or method docstring
+    "too-few-public-methods",           # R0903: Too few public methods
+    "too-many-ancestors",               # R0901: Too many ancestors
+    "too-many-arguments",               # R0913: Too many arguments
+    "too-many-positional-arguments",    # R0917: Too many positional arguments
+]
+notes=[]
+
+[tool.pylint.format]
+max-line-length=160
+
+[tool.pylint.main]
+ignore-paths=[".venv/*"]
+
+[tool.pyright]
+include=["."]
+exclude=[".venv", "**/__pycache__", "**/*.zip"]
+extraPaths=["src"]
+pythonVersion="3.13"
+pythonPlatform="Linux"
+reportIncompatibleVariableOverride=false  # Disabling as it gives false positives from Django's magic
+reportMissingImports=true
+reportPrivateImportUsage=true
+reportMissingTypeStubs=false
+venvPath="."
+venv=".venv"
+
+[tool.ruff]
+exclude=[]
+line-length = 160
+
+[tool.ruff.lint]
+ignore = [
+    "SIM105",  # suppressible-exception
+    "SIM112",  # uncapitalized-environment-variables
+]
+select = [
+    "E",  # pycodestyle
+    "F",  # Pyflakes
+    "UP",  # pyupgrade
+    "B",  # flake8-bugbear
+    "SIM",  # flake8-simplify
+]
+unfixable = ["I"]
+
+[tool.ruff.format]
+preview=true
