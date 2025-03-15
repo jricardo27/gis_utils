@@ -1,0 +1,33 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: Ruff Check
+        entry: uvx ruff check --config=pyproject.toml --no-cache
+        language: system
+        types: [python]
+        exclude: ^(.venv/)
+      - id: ruff-format
+        name: Ruff Format
+        entry: uvx ruff format --config=pyproject.toml --no-cache
+        language: system
+        types: [python]
+        exclude: ^(.venv/)
+      - id: isort
+        name: Isort
+        entry: uv run isort
+        exclude: ^(.venv/)
+        language: python
+        types: [python]
+      - id: python-lint-check
+        name: Pylint
+        entry: uv run pylint --rcfile ./pyproject.toml
+        exclude: ^(.venv/)
+        language: system
+        types: [python]
+      - id: python-pyright-check
+        name: Pyright
+        entry: uv run pyright
+        exclude: ^(.venv/)
+        language: system
+        types: [ python ]

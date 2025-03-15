@@ -1,0 +1,38 @@
+[project]
+name = "gis-utils"
+version = "0.1.0"
+description = "GIS utilities"
+requires-python = ">=3.13"
+dependencies = [
+    "click>=8.1.8",
+    "fiona>=1.10.1",
+]
+
+[dependency-groups]
+dev = [
+    "isort>=6.0.1",
+    "pre-commit>=4.1.0",
+    "pylint>=3.3.5",
+    "pyright>=1.1.396",
+]
+
+[tool.ruff]
+exclude=[]
+line-length = 160
+
+[tool.ruff.lint]
+ignore = [
+    "SIM105",  # suppressible-exception
+    "SIM112",  # uncapitalized-environment-variables
+]
+select = [
+    "E",  # pycodestyle
+    "F",  # Pyflakes
+    "UP",  # pyupgrade
+    "B",  # flake8-bugbear
+    "SIM",  # flake8-simplify
+]
+unfixable = ["I"]
+
+[tool.ruff.format]
+preview=true
