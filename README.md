@@ -41,18 +41,29 @@ This project uses `uv` for package management.
 
 This command-line tool converts a zipped shapefile to GeoJSON format. The tool extracts the shapefile components from the zip archive and converts the data to GeoJSON.
 
-#### Parameters
+#### Usage
 
--   `INPUT_ZIP_FILE`: The path to the zipped shapefile. The shapefile should be at the root of the zip file and the zip must include the `.shp`, `.shx`, and `.dbf` files.
--   `OUTPUT_GEOJSON_PATH`: The path where the output GeoJSON file should be created.
+```sh
+  shp2geojson input.zip output.geojson
+```
 
-#### Example
+-   `<input_zip_file>`: The path to the zipped shapefile. The shapefile should be at the root of the zip file and the zip must include the `.shp`, `.shx`, and `.dbf` files.
+-   `<output_geojson_path>`: The path where the output GeoJSON file should be created.
 
-    ```sh
-    shp2geojson input.zip output.geojson
-    ```
 
-This command will read the shapefile inside `input.zip` and create an `output.geojson` file with the converted GeoJSON data.
+### geojson-simplify
+
+Simplifies the geometry of Polygon and MultiPolygon features in a GeoJSON file using the Douglas-Peucker algorithm.
+
+#### Usage
+
+```sh
+  geojson-simplify <input_geojson_path> <output_geojson_path> --tolerance <tolerance>
+```
+
+-   `<input_geojson_path>`: Path to the input GeoJSON file.
+-   `<output_geojson_path>`: Path to the output GeoJSON file. (optional). If not provided, the file will have the same name but with `_simplified` in the middle.
+-   `--tolerance`: Simplification tolerance (in degrees for lat/long). Defaults to 0.001.
 
 
 ## Development
