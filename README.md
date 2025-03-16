@@ -51,20 +51,39 @@ This command-line tool converts a zipped shapefile to GeoJSON format. The tool e
 -   `<output_geojson_path>`: The path where the output GeoJSON file should be created.
 
 
-### geojson-simplify
+### `geojson_simplify`
 
 Simplifies the geometry of Polygon and MultiPolygon features in a GeoJSON file using the Douglas-Peucker algorithm.
 
 #### Usage
 
 ```sh
-  geojson-simplify <input_geojson_path> <output_geojson_path> --tolerance <tolerance>
+  geojson_simplify <input_geojson_path> <output_geojson_path> --tolerance <tolerance>
 ```
 
 -   `<input_geojson_path>`: Path to the input GeoJSON or zip file.
 -   `<output_geojson_path>`: Path to the output GeoJSON file. (optional). If not provided, the file will have the same name but with `_simplified` in the middle.
 -   `--tolerance`: Simplification tolerance (in degrees for lat/long). Defaults to 0.001.
 
+
+### `split_by_state`
+
+Splits a GeoJSON file into multiple files based on state boundaries.
+
+#### Usage
+
+```sh
+split_by_states <states_geojson_path> <input_geojson_path> <output_dir> <state_name_field>
+```
+
+-   `<states_geojson_path>`: Path to the GeoJSON file containing state boundaries. Can be a plain, zip or gz file.
+-   `<input_geojson_path>`: Path to the GeoJSON file to be split. Can be a plain, zip or gz file.
+-   `<output_dir>`: Directory to save the split GeoJSON files.
+-   `<state_name_field>`: The name of the field in the state GeoJSON properties containing the state name.
+
+The output files will be named as:
+
+    `<original_filename>_<state_name>.json`
 
 ## Development
 
