@@ -27,7 +27,36 @@ def test_geojson_simplify_success():
                     ],
                 },
                 "properties": {},
-            }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "MultiPolygon",
+                    "coordinates": [
+                        [
+                            [
+                                [3, 3],
+                                [3, 4],
+                                [3.5, 3.5],
+                                [4, 4],
+                                [4, 3],
+                                [3, 3],
+                            ]
+                        ],
+                        [
+                            [
+                                [6, 6],
+                                [6, 7],
+                                [6.5, 6.5],
+                                [7, 7],
+                                [7, 6],
+                                [6, 6],
+                            ]
+                        ],
+                    ],
+                },
+                "properties": {},
+            },
         ],
     }
 
@@ -50,6 +79,10 @@ def test_geojson_simplify_success():
                 # Check if the output has fewer points
                 assert len(data["features"][0]["geometry"]["coordinates"][0]) == 6
                 assert len(geojson_data["features"][0]["geometry"]["coordinates"][0]) == 5
+                assert len(data["features"][1]["geometry"]["coordinates"][0][0]) == 6
+                assert len(geojson_data["features"][1]["geometry"]["coordinates"][0][0]) == 5
+                assert len(data["features"][1]["geometry"]["coordinates"][1][0]) == 6
+                assert len(geojson_data["features"][1]["geometry"]["coordinates"][1][0]) == 5
             except json.JSONDecodeError:
                 pytest.fail("Output file is not valid GeoJSON")
 

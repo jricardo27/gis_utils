@@ -1,26 +1,33 @@
+#!/usr/bin/env python3
 import json
 import click
-import pyproj
 from shapely import simplify
 from shapely.geometry import mapping, shape
-from shapely.ops import transform
+from shapely.geometry.multipolygon import MultiPolygon
 
 
-def transform_coordinates(geom, source_crs, target_crs):
-    """
-    Transforms coordinates of a Shapely geometry.
+def _simplify_polygon(polygon, tolerance):
+    """Simplifies a Polygon and returns the point counts."""
+    points_before = len(polygon.exterior.coords)
+    simplified_polygon = simplify(polygon, tolerance)
+    points_after = len(simplified_polygon.exterior.coords)
 
-    Args:
-        geom (shapely.geometry): Shapely geometry object.
-        source_crs (str): Source coordinate reference system.
-        target_crs (str): Target coordinate reference system.
+    return mapping(simplified_polygon), points_before, points_after
 
-    Returns:
-        shapely.geometry: Transformed Shapely geometry object.
-    """
-    project = pyproj.Transformer.from_crs(source_crs, target_crs, always_xy=True).transform
-    transformed_geom = transform(project, geom)
-    return transformed_geom
+
+def _simplify_multipolygon(multipolygon, tolerance):
+    """Simplifies a MultiPolygon and returns the point counts."""
+    simplified_polygons = []
+    points_before = 0
+    points_after = 0
+
+    for polygon in multipolygon.geoms:
+        points_before += len(polygon.exterior.coords)
+        simplified_polygon = simplify(polygon, tolerance)
+        points_after += len(simplified_polygon.exterior.coords)
+        simplified_polygons.append(simplified_polygon)
+
+    return mapping(MultiPolygon(simplified_polygons)), points_before, points_after
 
 
 def _geojson_simplify(input_geojson_path, output_geojson_path, tolerance):
@@ -33,29 +40,29 @@ def _geojson_simplify(input_geojson_path, output_geojson_path, tolerance):
     with open(input_geojson_path, encoding="utf-8") as f:
         geojson_data = json.load(f)
 
-    for feature in geojson_data["features"]:
-        original_geom = shape(feature["geometry"])
-        if original_geom.geom_type == "Polygon":
-            simplified_geom = simplify(original_geom, tolerance)
+    for index, feature in enumerate(geojson_data["features"]):
+        if feature["geometry"] is None:
+            continue
 
+        original_geom = shape(feature["geometry"])
+
+        if original_geom.geom_type == "Polygon":
+            feature["geometry"], points_before, points_after = _simplify_polygon(original_geom, tolerance)
         elif original_geom.geom_type == "MultiPolygon":
-            simplified_geom = []
-            for polygon in original_geom.geoms:  # type: ignore
-                simplified_polygon = simplify(polygon, tolerance)
-                simplified_geom.append(simplified_polygon)
-            simplified_geom = type(original_geom)(simplified_geom)  # type: ignore
+            feature["geometry"], points_before, points_after = _simplify_multipolygon(original_geom, tolerance)
         else:
             continue
 
-        # Transform to GeoJson
-        feature["geometry"] = mapping(simplified_geom)
+        click.echo(f"Feature {index}: Points before {points_before}, points after {points_after}")
 
     if not output_geojson_path:
         filepath, extension = input_geojson_path.rsplit(".", 1)
         output_geojson_path = f"{filepath}_simplified.{extension}"
 
     with open(output_geojson_path, "w", encoding="utf-8") as f:
-        json.dump(geojson_data, f)
+        json.dump(geojson_data, f, indent=2)
+
+    click.echo(f"Input: {input_geojson_path}. Output: {output_geojson_path}.")
 
 
 @click.command("geojson-simplify")
