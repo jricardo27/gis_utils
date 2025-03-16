@@ -65,7 +65,7 @@ def test_geojson_simplify_success():
 
     with tempfile.NamedTemporaryFile(delete=False, suffix=".geojson") as temp_output_geojson:
         _geojson_simplify(
-            input_geojson_path=temp_input_geojson.name,
+            input_path=temp_input_geojson.name,
             output_geojson_path=temp_output_geojson.name,
             tolerance=1,
         )
