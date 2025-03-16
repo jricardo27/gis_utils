@@ -61,7 +61,7 @@ Simplifies the geometry of Polygon and MultiPolygon features in a GeoJSON file u
   geojson-simplify <input_geojson_path> <output_geojson_path> --tolerance <tolerance>
 ```
 
--   `<input_geojson_path>`: Path to the input GeoJSON file.
+-   `<input_geojson_path>`: Path to the input GeoJSON or zip file.
 -   `<output_geojson_path>`: Path to the output GeoJSON file. (optional). If not provided, the file will have the same name but with `_simplified` in the middle.
 -   `--tolerance`: Simplification tolerance (in degrees for lat/long). Defaults to 0.001.
 
