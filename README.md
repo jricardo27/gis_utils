@@ -34,6 +34,26 @@ This project uses `uv` for package management.
     ```sh
     uv sync
     ```
+   
+## Usage
+
+### `shp2geojson`
+
+This command-line tool converts a zipped shapefile to GeoJSON format. The tool extracts the shapefile components from the zip archive and converts the data to GeoJSON.
+
+#### Parameters
+
+-   `INPUT_ZIP_FILE`: The path to the zipped shapefile. The shapefile should be at the root of the zip file and the zip must include the `.shp`, `.shx`, and `.dbf` files.
+-   `OUTPUT_GEOJSON_PATH`: The path where the output GeoJSON file should be created.
+
+#### Example
+
+    ```sh
+    shp2geojson input.zip output.geojson
+    ```
+
+This command will read the shapefile inside `input.zip` and create an `output.geojson` file with the converted GeoJSON data.
+
 
 ## Development
 
